@@ -6,15 +6,30 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = GraphicsClassifier
 TEMPLATE = app
 
+CONFIG += c++11
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES     +=  ui/main.cpp\
+                ui/mainwindow.cpp \
+                comparer/comparer.cpp \
+                plot/qcustomplot.cpp \
+    manager/datamanager.cpp \
+    util/loader.cpp \
+    manager/algorithmmanager.cpp
 
-HEADERS  += mainwindow.h
+HEADERS     +=  ui/mainwindow.h \
+                comparer/comparer.h \
+                plot/qcustomplot.h \
+    manager/datamanager.h \
+    util/loader.h \
+    util/datastructures.h \
+    util/constants.h \
+    manager/algorithmmanager.h
 
-FORMS    += mainwindow.ui
+FORMS       +=  ui/mainwindow.ui
+
+RESOURCES   +=  resources.qrc
