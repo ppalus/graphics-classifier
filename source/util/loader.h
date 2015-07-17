@@ -7,7 +7,6 @@
 #include <QTextStream>
 
 #include "util/datastructures.h"
-#include "constants.h"
 
 extern const QString IMAGE_FILE_EXTENSION;
 extern const QString DATA_FILE_EXTENSION;
@@ -23,7 +22,7 @@ public:
 
 signals:
     void notifyProgress(const QString &message);
-    void result(DataSet dataSet);
+    void notifyResult(const DataSet &dataSet);
 
 private:
     virtual void run();

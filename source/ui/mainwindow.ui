@@ -30,7 +30,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -48,14 +48,47 @@
        <attribute name="title">
         <string>Tab 1</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="1">
-         <widget class="QSplitter" name="tab1Splitter">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="tab1InputListLayout">
+            <item>
+             <widget class="QLabel" name="inputList1Label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="inputList1">
+              <property name="iconSize">
+               <size>
+                <width>70</width>
+                <height>70</height>
+               </size>
+              </property>
+              <property name="resizeMode">
+               <enum>QListView::Adjust</enum>
+              </property>
+              <property name="viewMode">
+               <enum>QListView::IconMode</enum>
+              </property>
+              <property name="selectionRectVisible">
+               <bool>true</bool>
+              </property>
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
           <widget class="QWidget" name="verticalLayoutWidget">
-           <layout class="QVBoxLayout" name="tab1ListLayout">
+           <layout class="QVBoxLayout" name="tab1OutputListLayout">
             <item>
              <widget class="QPushButton" name="outputList1Button">
               <property name="sizePolicy">
@@ -82,7 +115,7 @@
             <item>
              <widget class="QListWidget" name="outputList1">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -130,7 +163,7 @@
             <item>
              <widget class="QListWidget" name="outputList2">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -175,7 +208,7 @@
             <item>
              <widget class="QListWidget" name="outputList3">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -223,7 +256,7 @@
             <item>
              <widget class="QListWidget" name="outputList4">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -268,7 +301,7 @@
             <item>
              <widget class="QListWidget" name="outputList5">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -297,6 +330,9 @@
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Preferred</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -337,39 +373,6 @@
            </layout>
           </widget>
          </widget>
-        </item>
-        <item row="0" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="inputList1Label">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QListWidget" name="inputList1">
-            <property name="iconSize">
-             <size>
-              <width>70</width>
-              <height>70</height>
-             </size>
-            </property>
-            <property name="resizeMode">
-             <enum>QListView::Adjust</enum>
-            </property>
-            <property name="viewMode">
-             <enum>QListView::IconMode</enum>
-            </property>
-            <property name="selectionRectVisible">
-             <bool>true</bool>
-            </property>
-            <property name="sortingEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
        </layout>
       </widget>
@@ -444,6 +447,12 @@
               <property name="enabled">
                <bool>true</bool>
               </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -454,6 +463,12 @@
             </item>
             <item row="0" column="1">
              <widget class="QLabel" name="imagePreview2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -472,35 +487,7 @@
        <attribute name="title">
         <string>Tab 3</string>
        </attribute>
-       <layout class="QGridLayout" name="tab3Layout" rowstretch="3,0" columnstretch="2,1,1,1">
-        <item row="0" column="0" rowspan="2">
-         <widget class="QListWidget" name="inputList3">
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
-          </property>
-          <property name="sizeAdjustPolicy">
-           <enum>QAbstractScrollArea::AdjustToContents</enum>
-          </property>
-          <property name="dragDropMode">
-           <enum>QAbstractItemView::DragDrop</enum>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>70</width>
-            <height>70</height>
-           </size>
-          </property>
-          <property name="resizeMode">
-           <enum>QListView::Adjust</enum>
-          </property>
-          <property name="viewMode">
-           <enum>QListView::IconMode</enum>
-          </property>
-          <property name="sortingEnabled">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
+       <layout class="QGridLayout" name="tab3Layout" rowstretch="3,0" columnstretch="0,0,0,0">
         <item row="1" column="1">
          <layout class="QHBoxLayout" name="tab3RadioButtonLayout">
           <item>
@@ -573,18 +560,59 @@
           </item>
          </layout>
         </item>
+        <item row="0" column="1" colspan="3">
+         <widget class="QCustomPlot" name="plotView" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="2">
+         <widget class="QListWidget" name="inputList3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <property name="dragDropMode">
+           <enum>QAbstractItemView::DragDrop</enum>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>70</width>
+            <height>70</height>
+           </size>
+          </property>
+          <property name="resizeMode">
+           <enum>QListView::Adjust</enum>
+          </property>
+          <property name="viewMode">
+           <enum>QListView::IconMode</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="2" colspan="2">
          <layout class="QGridLayout" name="tab3PlotRagesLayout">
-          <item row="0" column="2">
-           <widget class="QLineEdit" name="xMin"/>
-          </item>
-          <item row="0" column="4">
-           <widget class="QLineEdit" name="xMax"/>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="xMinLabel">
+          <item row="1" column="1">
+           <widget class="QLabel" name="yMinLabel">
             <property name="text">
-             <string>Xmin =</string>
+             <string>Ymin =</string>
             </property>
            </widget>
           </item>
@@ -595,10 +623,10 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="yMinLabel">
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="yMin">
             <property name="text">
-             <string>Ymin =</string>
+             <string>-1.1</string>
             </property>
            </widget>
           </item>
@@ -609,12 +637,8 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="yMin">
-            <property name="text">
-             <string>-1.1</string>
-            </property>
-           </widget>
+          <item row="0" column="4">
+           <widget class="QLineEdit" name="xMax"/>
           </item>
           <item row="1" column="4">
            <widget class="QLineEdit" name="yMax">
@@ -623,31 +647,24 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="5">
-           <widget class="QPushButton" name="plotButton">
+          <item row="0" column="2">
+           <widget class="QLineEdit" name="xMin"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="xMinLabel">
             <property name="text">
-             <string>Plot</string>
+             <string>Xmin =</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="5">
-           <widget class="QPushButton" name="savePlotButton">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
+          <item row="0" column="5" rowspan="2">
+           <widget class="QPushButton" name="replotButton">
             <property name="text">
-             <string>Save Plot</string>
+             <string>Replot</string>
             </property>
            </widget>
           </item>
          </layout>
-        </item>
-        <item row="0" column="1" colspan="3">
-         <widget class="QCustomPlot" name="plotView" native="true">
-          <property name="contextMenuPolicy">
-           <enum>Qt::CustomContextMenu</enum>
-          </property>
-         </widget>
         </item>
        </layout>
       </widget>
@@ -671,6 +688,7 @@
     <addaction name="actionLoadFolder"/>
     <addaction name="actionSaveResult"/>
     <addaction name="actionExit"/>
+    <addaction name="actionExit_2"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -707,31 +725,12 @@
   </action>
   <action name="actionExit">
    <property name="text">
+    <string>Save plot</string>
+   </property>
+  </action>
+  <action name="actionExit_2">
+   <property name="text">
     <string>Exit</string>
-   </property>
-  </action>
-  <action name="actionHistogram_Comparison">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Histogram Comparison</string>
-   </property>
-  </action>
-  <action name="actionSSIM">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>SSIM</string>
-   </property>
-  </action>
-  <action name="actionDifference_Comparison">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Difference Comparison</string>
    </property>
   </action>
  </widget>
@@ -749,7 +748,7 @@
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="radioButtonGroupM"/>
   <buttongroup name="radioButtonGroupB"/>
+  <buttongroup name="radioButtonGroupM"/>
  </buttongroups>
 </ui>

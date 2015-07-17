@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QFileDialog>
 
-#include "qcustomplot.h"
+#include "plot/qcustomplot.h"
 
 namespace Ui {
 class SavePlotDialog;

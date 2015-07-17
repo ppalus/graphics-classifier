@@ -6,6 +6,7 @@
 
 #include "manager/datamanager.h"
 #include "manager/algorithmmanager.h"
+#include "saveplotdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -34,12 +35,42 @@ private slots:
 
     void on_actionLoadFolder_triggered();
 
-    void on_algorithmBox_currentIndexChanged(const QString &arg1);
+    void on_inputList2_itemClicked(QListWidgetItem *item);
+
+    void on_outputList6_itemClicked(QListWidgetItem *item);
+
+    void on_tab2Splitter_splitterMoved(int pos, int index);
+
+    void on_radioButtonBx_clicked();
+
+    void on_radioButtonBy_clicked();
+
+    void on_radioButtonBz_clicked();
+
+    void on_radioButtonMx_clicked();
+
+    void on_radioButtonMy_clicked();
+
+    void on_radioButtonMz_clicked();
+
+    void on_plotView_customContextMenuRequested(const QPoint &pos);
+
+    void on_replotButton_clicked();
+
+    void on_plotView_mouseMove(QMouseEvent *event);
+
+    void on_actionSaveResult_triggered();
+
+    void on_thresholdSlider_valueChanged(int value);
+
+    void on_actionExit_triggered();
 
 private:
     void expandCollapseWidget(QWidget *widget, QAbstractButton *button);
+    void setSelection(QString name);
 
     Ui::MainWindow *ui;
+    SavePlotDialog *savePlotDialog;
     DataManager *dataManager;
     AlgorithmManager *algorithmManager;
 };

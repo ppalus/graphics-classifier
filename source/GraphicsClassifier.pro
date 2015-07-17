@@ -13,13 +13,22 @@ TEMPLATE = app
 
 CONFIG += c++11
 
+LIBS += -L/lib64/ \
+     -lopencv_core \
+     -lopencv_imgproc \
+     -lopencv_highgui
+
 SOURCES     +=  ui/main.cpp\
                 ui/mainwindow.cpp \
                 comparer/comparer.cpp \
                 plot/qcustomplot.cpp \
     manager/datamanager.cpp \
     util/loader.cpp \
-    manager/algorithmmanager.cpp
+    manager/algorithmmanager.cpp \
+    ui/saveplotdialog.cpp \
+    comparer/differencecomparer.cpp \
+    comparer/histogramcomparer.cpp \
+    comparer/ssimcomparer.cpp
 
 HEADERS     +=  ui/mainwindow.h \
                 comparer/comparer.h \
@@ -28,8 +37,13 @@ HEADERS     +=  ui/mainwindow.h \
     util/loader.h \
     util/datastructures.h \
     util/constants.h \
-    manager/algorithmmanager.h
+    manager/algorithmmanager.h \
+    ui/saveplotdialog.h \
+    comparer/differencecomparer.h \
+    comparer/histogramcomparer.h \
+    comparer/ssimcomparer.h
 
-FORMS       +=  ui/mainwindow.ui
+FORMS       +=  ui/mainwindow.ui \
+    ui/saveplotdialog.ui
 
 RESOURCES   +=  resources.qrc

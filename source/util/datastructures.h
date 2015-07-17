@@ -2,6 +2,12 @@
 #define DATASTRUCTURES
 
 #include <QString>
+#include <QVector>
+
+#include "constants.h"
+
+extern const QString ST_IT_SEPARATOR;
+extern const QString IMAGE_FILE_EXTENSION;
 
 struct Image
 {
@@ -23,6 +29,12 @@ struct DataSet
     int stageLength;
     int iterationLength;
     QVector<Image> images;
+
+    QString getName(int position)
+    {
+        Image image = images.at(position);
+        return prefix + image.stage + ST_IT_SEPARATOR + image.iteration + "." + IMAGE_FILE_EXTENSION;
+    }
 };
 Q_DECLARE_METATYPE(DataSet);
 

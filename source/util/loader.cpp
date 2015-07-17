@@ -135,7 +135,7 @@ void Loader::run()
                     image.my = splittedLine.at(myColumn).toDouble();
                     image.mz = splittedLine.at(mzColumn).toDouble();
                     dataSet.images.append(image);
-                    emit notifyProgress("Images loaded " + QString::number(++loadCounter) + " / " + QString::number(images.size()));
+                    emit notifyProgress("Images loaded " + QString::number(loadCounter++) + " / " + QString::number(images.size()));
                 }
             }
             else
@@ -144,7 +144,7 @@ void Loader::run()
                 return;
             }
         }
-        emit result(dataSet);
+        emit notifyResult(dataSet);
         file.close();
         emit notifyProgress("Loading finished");
         return;
