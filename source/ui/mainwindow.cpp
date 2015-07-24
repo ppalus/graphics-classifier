@@ -271,7 +271,12 @@ void MainWindow::on_thresholdSlider_valueChanged(int value)
     ui->thresholdLabel->setText("Threshold: " + QString::number(value / 100.));
 }
 
-void MainWindow::on_actionExit_triggered()
+void MainWindow::on_actionSavePlot_triggered()
 {
     savePlotDialog->show();
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    this->close();
 }

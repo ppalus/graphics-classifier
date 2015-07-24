@@ -33,7 +33,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -732,8 +732,8 @@
     </property>
     <addaction name="actionLoadFolder"/>
     <addaction name="actionSaveResult"/>
+    <addaction name="actionSavePlot"/>
     <addaction name="actionExit"/>
-    <addaction name="actionExit_2"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -768,12 +768,12 @@
     <string>Save result</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="actionSavePlot">
    <property name="text">
     <string>Save plot</string>
    </property>
   </action>
-  <action name="actionExit_2">
+  <action name="actionExit">
    <property name="text">
     <string>Exit</string>
    </property>

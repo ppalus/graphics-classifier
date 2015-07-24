@@ -63,6 +63,8 @@ private slots:
 
     void on_thresholdSlider_valueChanged(int value);
 
+    void on_actionSavePlot_triggered();
+
     void on_actionExit_triggered();
 
 private:
