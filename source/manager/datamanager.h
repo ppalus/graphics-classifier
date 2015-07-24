@@ -2,16 +2,20 @@
 #define DATAMANAGER_H
 
 #include <cmath>
+#include <QColor>
 
 #include "ui_mainwindow.h"
 #include "util/loader.h"
 #include "util/datastructures.h"
+#include "plot/qcustomplot.h"
 
 class DataManager : public QObject
 {
     Q_OBJECT
 
     static const int RESULT_MAX_COUNT;
+    static const QColor PLOT_COLOR[];
+    static const QCPScatterStyle::ScatterShape PLOT_SHAPE[];
 
 public:
 
@@ -39,13 +43,13 @@ public:
     void setYCol(const QString yCol) { this->yCol = yCol; }
 
 public slots:
-    void setOutputData(const DataSet &dataSet, QString &algorithm);
+    void setOutputData(const DataSet &dataSet, const QString algorithm);
 
 private slots:
     void setInputData(const DataSet &dataSet);
 
 private:
-    void showOutputData(QListWidget *outputList, QAbstractButton *button, QString &algorithm);
+    void showOutputData(QListWidget *outputList, QAbstractButton *button, const QString algorithm);
 
     Loader loader;
     Ui::MainWindow *ui;

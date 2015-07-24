@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     savePlotDialog->setPlotWidget(ui->plotView);
     dataManager = new DataManager(ui);
     algorithmManager = new AlgorithmManager(ui);
-    QObject::connect(algorithmManager, SIGNAL(notifyResult(const DataSet&,QString&)), dataManager, SLOT(setOutputData(const DataSet&,QString&)));
+    QObject::connect(algorithmManager, SIGNAL(notifyResult(const DataSet&,const QString)), dataManager, SLOT(setOutputData(const DataSet&,const QString)));
 }
 
 MainWindow::~MainWindow()

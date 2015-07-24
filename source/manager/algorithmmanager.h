@@ -21,7 +21,7 @@ public:
     void compare(DataSet &dataSet);
 
 signals:
-    void notifyResult(const DataSet &dataSet, QString &algorithm);
+    void notifyResult(const DataSet &dataSet, const QString algorithm);
 
 private slots:
     void setThreshold(int threshold) { this->threshold = threshold / 100.; }

@@ -59,5 +59,5 @@ void AlgorithmManager::compare(DataSet &dataSet)
 
 void AlgorithmManager::setData(const DataSet &dataSet)
 {
-    emit notifyResult(dataSet, algorithm);
+    emit notifyResult(dataSet, algorithm + " " + QString::number(threshold));
 }

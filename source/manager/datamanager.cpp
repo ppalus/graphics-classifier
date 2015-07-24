@@ -7,6 +7,8 @@ const QString DataManager::MX_ID = "radioButtonMx";
 const QString DataManager::MY_ID = "radioButtonMy";
 const QString DataManager::MZ_ID = "radioButtonMz";
 const int DataManager::RESULT_MAX_COUNT = 5;
+const QColor DataManager::PLOT_COLOR[] = {QColor(255, 0, 255), QColor(0, 0, 255), QColor(0, 255, 255), QColor(0, 255, 0), QColor(255, 255, 0)};
+const QCPScatterStyle::ScatterShape DataManager::PLOT_SHAPE[] = {QCPScatterStyle::ssCircle, QCPScatterStyle::ssSquare, QCPScatterStyle::ssDiamond, QCPScatterStyle::ssTriangle, QCPScatterStyle::ssTriangleInverted};
 
 DataManager::DataManager(Ui::MainWindow *ui) :
     ui(ui),
@@ -32,7 +34,10 @@ void DataManager::setInputData(const DataSet &dataSet)
     input = dataSet;
     QString info = dataSet.prefix;
     info.chop(1);
+    info += "\nCount: " + QString::number(input.images.size());
     ui->inputList1Label->setText(info);
+    ui->inputList2Label->setText(info);
+    ui->inputList3Label->setText(info);
     ui->inputList1->clear();
     ui->inputList2->clear();
     ui->inputList3->clear();
@@ -50,7 +55,7 @@ void DataManager::setInputData(const DataSet &dataSet)
     }
 }
 
-void DataManager::setOutputData(const DataSet &dataSet, QString &algorithm)
+void DataManager::setOutputData(const DataSet &dataSet, const QString algorithm)
 {
     if(++index >= RESULT_MAX_COUNT)
         index = 0;
@@ -85,13 +90,15 @@ void DataManager::setOutputData(const DataSet &dataSet, QString &algorithm)
     showOutputData(outputList, button, algorithm);
 }
 
-void DataManager::showOutputData(QListWidget *outputList, QAbstractButton *button, QString &algorithm)
+void DataManager::showOutputData(QListWidget *outputList, QAbstractButton *button, const QString algorithm)
 {
     outputList->clear();
     ui->outputList6->clear();
     QString info = output[index].prefix;
     info.chop(1);
-    button->setText(info + " [" + algorithm + "]\nCount: " + QString::number(output[index].images.size()));
+    info += " [" + algorithm + "]\nCount: " + QString::number(output[index].images.size());
+    button->setText(info);
+    ui->outputList6Label->setText(info);
     for(Image image : output[index].images)
     {
         QString path = output[index].path + "/" +
@@ -139,9 +146,9 @@ void DataManager::plotInput()
     }
     int plotIdx = ui->plotView->graphCount() - 1;
     ui->plotView->graph(plotIdx)->setData(x, y);
-    ui->plotView->graph(plotIdx)->setPen(QPen(QColor(255, 100, 0)));
+    ui->plotView->graph(plotIdx)->setPen(QPen(QColor(255, 0, 0)));
     ui->plotView->graph(plotIdx)->setLineStyle(QCPGraph::lsLine);
-    ui->plotView->graph(plotIdx)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5));
+    ui->plotView->graph(plotIdx)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssStar, 5));
     ui->plotView->xAxis->setRange(ui->xMin->text().toDouble(), ui->xMax->text().toDouble());
     ui->plotView->yAxis->setRange(ui->yMin->text().toDouble(), ui->yMax->text().toDouble());
     ui->plotView->graph(plotIdx)->setSelectable(true);
@@ -189,9 +196,9 @@ void DataManager::plotOutput()
         }
     }
     graph->setData(x, y);
-    graph->setPen(QPen(QColor(255, 100, 0)));
+    graph->setPen(QPen(PLOT_COLOR[index]));
     graph->setLineStyle(QCPGraph::lsLine);
-    graph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 5));
+    graph->setScatterStyle(QCPScatterStyle(PLOT_SHAPE[index], 5));
     ui->plotView->xAxis->setRange(ui->xMin->text().toDouble(), ui->xMax->text().toDouble());
     ui->plotView->yAxis->setRange(ui->yMin->text().toDouble(), ui->yMax->text().toDouble());
     graph->setSelectable(true);
