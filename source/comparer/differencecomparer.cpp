@@ -18,9 +18,8 @@ void DifferenceComparer::compare()
                                    + " (time: " + QString::number(timer.elapsed()/1000) + "s)");
         cv::Mat first = cv::imread(getNext().toStdString().c_str());
         cv::Mat second = cv::imread(getNext().toStdString().c_str());
-        int difference = calculateDifference(first, second);
-        int size = first.cols * first.rows;
-        if (difference > (threshold*size)/size)
+        double difference = (double) calculateDifference(first, second)/(first.cols * first.rows);
+        if (difference > threshold)
         {
             result.images.push_back(getNextImage());
         }

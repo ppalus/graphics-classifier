@@ -225,7 +225,7 @@ void MainWindow::on_plotView_customContextMenuRequested(const QPoint &pos)
         QList<QCPGraph*> selectionList = ui->plotView->selectedGraphs();
         for(QCPGraph* selectedGraph : selectionList)
         {
-            dataManager->removeData(selectedGraph);
+            dataManager->removeOutputDataByGraph(selectedGraph);
             ui->plotView->removeGraph(selectedGraph);
         }
         ui->plotView->replot();

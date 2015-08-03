@@ -9,6 +9,7 @@
 #include "util/datastructures.h"
 #include "plot/qcustomplot.h"
 
+//TODO dataSlot
 class DataManager : public QObject
 {
     Q_OBJECT
@@ -16,6 +17,24 @@ class DataManager : public QObject
     static const int RESULT_MAX_COUNT;
     static const QColor PLOT_COLOR[];
     static const QCPScatterStyle::ScatterShape PLOT_SHAPE[];
+
+    struct ImageData
+    {
+        QString stage;
+        QString iteration;
+        qreal x;
+        qreal y;
+    };
+
+    struct OutputDataSlot
+    {
+        QString id;
+        QCPGraph *graph;
+        QListWidget *list;
+        QAbstractButton *label;
+        bool active;
+        DataSet dataSet;
+    };
 
 public:
 
@@ -35,7 +54,7 @@ public:
     void replot();
     QStringList findImage(qreal b, qreal m);
     void saveResult();
-    void removeData(QCPGraph *graph);
+    void removeOutputDataByGraph(QCPGraph* graph);
 
     DataSet& getInput() { return input; }
 
@@ -44,29 +63,33 @@ public:
 
 public slots:
     void setOutputData(const DataSet &dataSet, const QString algorithm);
+    void setOutputList6Content(QString id);
+    void clearOutputData1();
+    void clearOutputData2();
+    void clearOutputData3();
+    void clearOutputData4();
+    void clearOutputData5();
+    void setActiveData1();
+    void setActiveData2();
+    void setActiveData3();
+    void setActiveData4();
+    void setActiveData5();
 
 private slots:
     void setInputData(const DataSet &dataSet);
 
 private:
-    void showOutputData(QListWidget *outputList, QAbstractButton *button, const QString algorithm);
+    void removeOutputData(QString id);
+    void moveOutputUp(int index);
+    void fixOutputLists();
 
     Loader loader;
     Ui::MainWindow *ui;
     DataSet input;
-    QVector<DataSet> output;
+    OutputDataSlot output[5];
     QString xCol;
     QString yCol;
-    int index;
-    QMap<int, QCPGraph*> dataPlotMap;
 
-    struct ImageData
-    {
-        QString stage;
-        QString iteration;
-        qreal x;
-        qreal y;
-    };
 };
 
 #endif // DATAMANAGER_H
