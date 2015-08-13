@@ -6,8 +6,7 @@ const QString DataManager::BZ_ID = "radioButtonBz";
 const QString DataManager::MX_ID = "radioButtonMx";
 const QString DataManager::MY_ID = "radioButtonMy";
 const QString DataManager::MZ_ID = "radioButtonMz";
-const int DataManager::RESULT_MAX_COUNT = 5;
-const QColor DataManager::PLOT_COLOR[] = {QColor(255, 0, 255), QColor(0, 0, 255), QColor(0, 255, 255), QColor(0, 255, 0), QColor(255, 255, 0)};
+const QColor DataManager::PLOT_COLOR[] = {QColor(255, 0, 255), QColor(0, 0, 255), QColor(0, 255, 255), QColor(0, 255, 0), QColor(0, 0, 0)};
 const QCPScatterStyle::ScatterShape DataManager::PLOT_SHAPE[] = {QCPScatterStyle::ssCircle, QCPScatterStyle::ssSquare, QCPScatterStyle::ssDiamond, QCPScatterStyle::ssTriangle, QCPScatterStyle::ssTriangleInverted};
 
 DataManager::DataManager(Ui::MainWindow *ui) :
@@ -20,33 +19,7 @@ DataManager::DataManager(Ui::MainWindow *ui) :
     QObject::connect(ui->outputList3RemoveButton, SIGNAL(clicked(bool)), this, SLOT(clearOutputData3()));
     QObject::connect(ui->outputList4RemoveButton, SIGNAL(clicked(bool)), this, SLOT(clearOutputData4()));
     QObject::connect(ui->outputList5RemoveButton, SIGNAL(clicked(bool)), this, SLOT(clearOutputData5()));
-    QObject::connect(ui->outputList1CheckBox, SIGNAL(clicked(bool)), this, SLOT(setActiveData1()));
-    QObject::connect(ui->outputList2CheckBox, SIGNAL(clicked(bool)), this, SLOT(setActiveData2()));
-    QObject::connect(ui->outputList3CheckBox, SIGNAL(clicked(bool)), this, SLOT(setActiveData3()));
-    QObject::connect(ui->outputList4CheckBox, SIGNAL(clicked(bool)), this, SLOT(setActiveData4()));
-    QObject::connect(ui->outputList5CheckBox, SIGNAL(clicked(bool)), this, SLOT(setActiveData5()));
     QObject::connect(ui->outputList6ComboBox, SIGNAL(activated(QString)), this, SLOT(setOutputList6Content(QString)));
-
-    output[0].label = ui->outputList1CheckBox;
-    output[0].list = ui->outputList1;
-    output[0].graph = nullptr;
-    output[0].active = false;
-    output[1].label = ui->outputList2CheckBox;
-    output[1].list = ui->outputList2;
-    output[1].graph = nullptr;
-    output[1].active = false;
-    output[2].label = ui->outputList3CheckBox;
-    output[2].list = ui->outputList3;
-    output[2].graph = nullptr;
-    output[2].active = false;
-    output[3].label = ui->outputList4CheckBox;
-    output[3].list = ui->outputList4;
-    output[3].graph = nullptr;
-    output[4].active = false;
-    output[4].label = ui->outputList5CheckBox;
-    output[4].list = ui->outputList5;
-    output[4].graph = nullptr;
-    output[4].active = false;
 }
 
 DataManager::~DataManager()
@@ -92,76 +65,18 @@ void DataManager::setOutputData(const DataSet &dataSet, const QString algorithm)
     id.chop(1);
     id += "-" + algorithm + "-count: " + QString::number(dataSet.images.size());
 
-    if(!output[4].id.isEmpty() && !output[3].id.isEmpty() && !output[2].id.isEmpty() &&
-            !output[1].id.isEmpty() && !output[0].id.isEmpty())
-    {
-        ui->outputList6ComboBox->removeItem(0);
-        moveOutputUp(1);
-        moveOutputUp(2);
-        moveOutputUp(3);
-        moveOutputUp(4);
-    }
-    else if(!output[4].id.isEmpty() && !output[3].id.isEmpty() && !output[2].id.isEmpty() &&
-            !output[1].id.isEmpty() && output[0].id.isEmpty())
-    {
-        moveOutputUp(1);
-        moveOutputUp(2);
-        moveOutputUp(3);
-        moveOutputUp(4);
-    }
-    else if(!output[4].id.isEmpty() && !output[3].id.isEmpty() && !output[2].id.isEmpty() &&
-            output[1].id.isEmpty() && output[0].id.isEmpty())
-    {
-        moveOutputUp(2);
-        moveOutputUp(3);
-        moveOutputUp(4);
-    }
-    else if(!output[4].id.isEmpty() && !output[3].id.isEmpty() && output[2].id.isEmpty() &&
-            output[1].id.isEmpty() && output[0].id.isEmpty())
-    {
-        moveOutputUp(3);
-        moveOutputUp(4);
-    }
-    else if(!output[4].id.isEmpty() && output[3].id.isEmpty() && output[2].id.isEmpty() &&
-            output[1].id.isEmpty() && output[0].id.isEmpty())
-    {
-        moveOutputUp(4);
-    }
+    if(output.size() >= RESULT_MAX_COUNT)
+        removeOutput(RESULT_MAX_COUNT-1);
 
     ui->outputList6ComboBox->addItem(id);
-    output[4].label->setText(id);
-    output[4].id = id;
-    output[4].dataSet = dataSet;
-    for(Image image : output[4].dataSet.images)
-    {
-        QString path = output[4].dataSet.path + "/" +
-                output[4].dataSet.prefix + image.stage + ST_IT_SEPARATOR + image.iteration + "." + IMAGE_FILE_EXTENSION;
-        QString name = image.stage + ST_IT_SEPARATOR + image.iteration;
-        if(QFileInfo(path).isFile())
-        {
-            output[4].list->addItem(new QListWidgetItem(QIcon(path), name));
-        }
-    }
-}
 
-void DataManager::moveOutputUp(int index)
-{
-    output[index-1].list->clear();
-    for(Image image : output[index].dataSet.images)
-    {
-        QString path = output[index].dataSet.path + "/" +
-                output[index].dataSet.prefix + image.stage + ST_IT_SEPARATOR + image.iteration + "." + IMAGE_FILE_EXTENSION;
-        QString name = image.stage + ST_IT_SEPARATOR + image.iteration;
-        if(QFileInfo(path).isFile())
-        {
-            output[index-1].list->addItem(new QListWidgetItem(QIcon(path), name));
-        }
-    }
-    output[index].list->clear();
-    output[index-1].id = output[index].id;
-    output[index-1].graph = output[index].graph;
-    output[index-1].dataSet = output[index].dataSet;
-    output[index-1].label->setText(output[index-1].id);
+    Output result;
+    result.id = id;
+    result.graph = nullptr;
+    result.data = dataSet;
+    output.prepend(result);
+
+    refreshUI();
 }
 
 void DataManager::plotInput()
@@ -196,11 +111,14 @@ void DataManager::plotInput()
             y.append(image.mz);
         }
     }
+    QString info = input.prefix;
+    info.chop(1);
     int plotIdx = ui->plotView->graphCount() - 1;
     ui->plotView->graph(plotIdx)->setData(x, y);
     ui->plotView->graph(plotIdx)->setPen(QPen(QColor(255, 0, 0)));
     ui->plotView->graph(plotIdx)->setLineStyle(QCPGraph::lsLine);
-    ui->plotView->graph(plotIdx)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssStar, 5));
+    ui->plotView->graph(plotIdx)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssStar, 15));
+    ui->plotView->graph(plotIdx)->setName(info);
     ui->plotView->xAxis->setRange(ui->xMin->text().toDouble(), ui->xMax->text().toDouble());
     ui->plotView->yAxis->setRange(ui->yMin->text().toDouble(), ui->yMax->text().toDouble());
     ui->plotView->graph(plotIdx)->setSelectable(true);
@@ -210,26 +128,21 @@ void DataManager::plotInput()
 
 void DataManager::plotOutput()
 {
-    QVector<int> activeIndexes;
-    for(int i = 0; i < RESULT_MAX_COUNT; ++i)
+    for(int i=0; i<output.size(); ++i)
     {
-        if(output[i].active)
+        if(!output[i].label->isChecked())
+            continue;
+
+        if(output[i].graph)
         {
-            activeIndexes.append(i);
-        }
-    }
-    for(int index : activeIndexes)
-    {
-        if(output[index].graph)
-        {
-            ui->plotView->removeGraph(output[index].graph);
+            ui->plotView->removeGraph(output[i].graph);
             ui->plotView->replot();
         }
         QCPGraph *graph = ui->plotView->addGraph();
-        output[index].graph = graph;
+        output[i].graph = graph;
         QVector<qreal> x;
         QVector<qreal> y;
-        for(Image image : output[index].dataSet.images)
+        for(Image image : output[i].data.images)
         {
             if(xCol == BX_ID)
             {
@@ -257,9 +170,10 @@ void DataManager::plotOutput()
             }
         }
         graph->setData(x, y);
-        graph->setPen(QPen(PLOT_COLOR[index]));
+        graph->setPen(QPen(PLOT_COLOR[i]));
         graph->setLineStyle(QCPGraph::lsLine);
-        graph->setScatterStyle(QCPScatterStyle(PLOT_SHAPE[index], 10));
+        graph->setScatterStyle(QCPScatterStyle(PLOT_SHAPE[i], 15));
+        graph->setName(output[i].id);
         ui->plotView->xAxis->setRange(ui->xMin->text().toDouble(), ui->xMax->text().toDouble());
         ui->plotView->yAxis->setRange(ui->yMin->text().toDouble(), ui->yMax->text().toDouble());
         graph->setSelectable(true);
@@ -314,9 +228,9 @@ QStringList DataManager::findImage(qreal b, qreal m)
         data.append(imgData);
     }
 
-    for(OutputDataSlot outputData : output)
+    for(Output outputData : output)
     {
-        for(Image image : outputData.dataSet.images)
+        for(Image image : outputData.data.images)
         {
             ImageData imgData;
             imgData.stage = image.stage;
@@ -384,11 +298,11 @@ void DataManager::saveResult()
     dialog.setOption(QFileDialog::ShowDirsOnly);
     int result = dialog.exec();
     QString path = dialog.directory().path();
-    for(OutputDataSlot data : output)
+    for(Output data : output)
     {
-        if(data.active)
+        if(data.label->isChecked())
         {
-            if(data.dataSet.images.isEmpty())
+            if(data.data.images.isEmpty())
             {
                 QMessageBox msgBox;
                 msgBox.setText("No result.");
@@ -400,9 +314,9 @@ void DataManager::saveResult()
             QString pathToSave = path +  "/" + data.id;
             dialog.close();
             QVector<QString> resultVector;
-            for(Image image : data.dataSet.images)
+            for(Image image : data.data.images)
             {
-                resultVector.append(data.dataSet.prefix + image.stage + ST_IT_SEPARATOR + image.iteration+ "." + IMAGE_FILE_EXTENSION);
+                resultVector.append(data.data.prefix + image.stage + ST_IT_SEPARATOR + image.iteration+ "." + IMAGE_FILE_EXTENSION);
             }
 
             if(result)
@@ -418,90 +332,40 @@ void DataManager::saveResult()
 
 void DataManager::clearOutputData1()
 {
-    ui->outputList6ComboBox->removeItem(0);
-    ui->plotView->removeGraph(output[0].graph);
-    ui->plotView->replot();
-    output[0].label->setText("");
-    output[0].id.clear();
-    fixOutputLists();
+    removeOutput(4);
 }
 
 void DataManager::clearOutputData2()
 {
-    ui->outputList6ComboBox->removeItem(1);
-    ui->plotView->removeGraph(output[1].graph);
-    ui->plotView->replot();
-    output[1].label->setText("");
-    output[1].id.clear();
-    fixOutputLists();
+    removeOutput(3);
 }
 
 void DataManager::clearOutputData3()
 {
-    ui->outputList6ComboBox->removeItem(2);
-    ui->plotView->removeGraph(output[2].graph);
-    ui->plotView->replot();
-    output[2].label->setText("");
-    output[2].id.clear();
-    fixOutputLists();
+    removeOutput(2);
 }
 
 void DataManager::clearOutputData4()
 {
-    ui->outputList6ComboBox->removeItem(3);
-    ui->plotView->removeGraph(output[3].graph);
-    ui->plotView->replot();
-    output[3].label->setText("");
-    output[3].id.clear();
-    fixOutputLists();
+    removeOutput(1);
 }
 
 void DataManager::clearOutputData5()
 {
-    ui->outputList6ComboBox->removeItem(4);
-    ui->plotView->removeGraph(output[4].graph);
-    ui->plotView->replot();
-    output[4].id.clear();
-    ui->outputList5CheckBox->setText("");
-    ui->outputList5->clear();
-}
-
-void DataManager::setActiveData1()
-{
-    output[0].active = !output[0].active;
-}
-
-void DataManager::setActiveData2()
-{
-    output[1].active = !output[1].active;
-}
-
-void DataManager::setActiveData3()
-{
-    output[2].active = !output[2].active;
-}
-
-void DataManager::setActiveData4()
-{
-    output[3].active = !output[3].active;
-}
-
-void DataManager::setActiveData5()
-{
-    output[4].active = !output[4].active;
+    removeOutput(0);
 }
 
 void DataManager::setOutputList6Content(QString id)
 {
     ui->outputList6->clear();
-    for(OutputDataSlot data : output)
+    for(Output slot : output)
     {
-        if(id == data.id)
+        if(id == slot.id)
         {
-            for(Image image : data.dataSet.images)
+            for(Image image : slot.data.images)
             {
-                QString path = data.dataSet.path + "/" +
-                        data.dataSet.prefix + image.stage + ST_IT_SEPARATOR + image.iteration + "." + IMAGE_FILE_EXTENSION;
+                QString path = slot.data.path + "/" +
+                        slot.data.prefix + image.stage + ST_IT_SEPARATOR + image.iteration + "." + IMAGE_FILE_EXTENSION;
                 QString name = image.stage + ST_IT_SEPARATOR + image.iteration;
                 if(QFileInfo(path).isFile())
                 {
@@ -514,73 +378,101 @@ void DataManager::setOutputList6Content(QString id)
 
 }
 
-void DataManager::removeOutputData(QString id)
+void DataManager::removeOutput(int index)
 {
-    for(int i = 0; i < RESULT_MAX_COUNT; ++i)
-    {
-        if(id == output[i].id)
-        {
-            output[i].id = "";
-            ui->outputList6ComboBox->removeItem(i);
-            ui->plotView->removeGraph(output[i].graph);
-            ui->plotView->replot();
-            output[i].label->setText("");
-            output[i].list->clear();
-            output[i].graph = nullptr;
-            output[i].active = false;
-            fixOutputLists();
-        }
-    }
-}
+    if(output.isEmpty() || index > output.size()-1)
+        return;
 
-void DataManager::removeOutputDataByGraph(QCPGraph *graph)
-{
-    QString id;
-    for(OutputDataSlot data : output)
+    ui->plotView->removeGraph(output[index].graph);
+    ui->plotView->replot();
+    for(int i=0; i<ui->outputList6ComboBox->count(); ++i)
     {
-        if(data.graph == graph)
+        if(ui->outputList6ComboBox->itemText(i) == output[index].id)
         {
-            id = data.id;
+            ui->outputList6ComboBox->removeItem(i);
             break;
         }
     }
-    if(id.isEmpty())
-    {
-        //TODO remove inputplot
-    }
-    removeOutputData(id);
+    output[index].label->setText("");
+    output[index].list->clear();
+    output.removeAt(index);
 }
 
-void DataManager::fixOutputLists()
+void DataManager::removeOutput(QString id)
 {
-    for(int i = 0; i < RESULT_MAX_COUNT; ++i)
-    {
-        if(output[i].id.isEmpty())
-        {
-            for(int j = 0; j < i; ++j)
-            {
-                output[i-j-1].list->clear();
-                for(Image image : output[i-j].dataSet.images)
-                {
-                    QString path = output[i-j].dataSet.path + "/" +
-                            output[i-j].dataSet.prefix + image.stage + ST_IT_SEPARATOR + image.iteration + "." + IMAGE_FILE_EXTENSION;
-                    QString name = image.stage + ST_IT_SEPARATOR + image.iteration;
-                    if(QFileInfo(path).isFile())
-                    {
-                        output[i-j-1].list->addItem(new QListWidgetItem(QIcon(path), name));
-                    }
-                }
-                /*for(int k = 0; k < output[i-j-1].list->count(); ++k)
-                {
-                    QListWidgetItem *item = output[i-j-1].list->item(k);
-                    output[i-j-1].list->addItem(item);
-                }*/
+    if(id.isEmpty())
+        return;
 
-                output[i-j].list->clear();
-                output[i-j].id = output[i-j-1].id;
-                output[i-j].graph = output[i-j-1].graph;
-                output[i-j].dataSet = output[i-j-1].dataSet;
-                output[i-j].label->setText(output[i-j].id);
+    for(int i=0; i<output.size(); ++i)
+    {
+        if(id == output[i].id)
+        {
+            removeOutput(i);
+        }
+    }
+}
+
+void DataManager::removeGraph(QCPGraph *graph)
+{
+    bool removedOutput = false;
+    for(int i=0; i<output.size(); ++i)
+    {
+        if(output[i].graph == graph)
+        {
+            removeOutput(i);
+            removedOutput = true;
+        }
+    }
+    if(!removedOutput)
+    {
+        ui->plotView->removeGraph(graph);
+        ui->plotView->replot();
+    }
+}
+
+void DataManager::refreshUI()
+{
+    if(output.size() > 0)
+    {
+        output[0].list = ui->outputList5;
+        output[0].label = ui->outputList5CheckBox;
+    }
+    if(output.size() > 1)
+    {
+        output[1].list = ui->outputList4;
+        output[1].label = ui->outputList4CheckBox;
+    }
+    if(output.size() > 2)
+    {
+        output[2].list = ui->outputList3;
+        output[2].label = ui->outputList3CheckBox;
+    }
+    if(output.size() > 3)
+    {
+        output[3].list = ui->outputList2;
+        output[3].label = ui->outputList2CheckBox;
+    }
+    if(output.size() > 4)
+    {
+        output[4].list = ui->outputList1;
+        output[4].label = ui->outputList1CheckBox;
+    }
+    for(Output slot : output)
+    {
+        if(!slot.id.isEmpty())
+        {
+            slot.label->setText(slot.id);
+            slot.label->setChecked(slot.label->isChecked());
+            slot.list->clear();
+            for(Image image : slot.data.images)
+            {
+                QString path = slot.data.path + "/" +
+                        slot.data.prefix + image.stage + ST_IT_SEPARATOR + image.iteration + "." + IMAGE_FILE_EXTENSION;
+                QString name = image.stage + ST_IT_SEPARATOR + image.iteration;
+                if(QFileInfo(path).isFile())
+                {
+                    slot.list->addItem(new QListWidgetItem(QIcon(path), name));
+                }
             }
         }
     }

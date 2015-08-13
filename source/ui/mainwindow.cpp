@@ -11,6 +11,14 @@ MainWindow::MainWindow(QWidget *parent) :
     dataManager = new DataManager(ui);
     algorithmManager = new AlgorithmManager(ui);
     QObject::connect(algorithmManager, SIGNAL(notifyResult(const DataSet&,const QString)), dataManager, SLOT(setOutputData(const DataSet&,const QString)));
+
+    ui->plotView->setLocale(QLocale(QLocale::English, QLocale::UnitedKingdom)); // period as decimal separator and comma as thousand separator
+    ui->plotView->legend->setVisible(true);
+    QFont legendFont = font();
+    legendFont.setPointSize(9);
+    ui->plotView->legend->setFont(legendFont);
+    ui->plotView->legend->setBrush(QBrush(QColor(255,255,255,230)));
+    ui->plotView->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignBottom|Qt::AlignRight);
 }
 
 MainWindow::~MainWindow()
@@ -225,7 +233,7 @@ void MainWindow::on_plotView_customContextMenuRequested(const QPoint &pos)
         QList<QCPGraph*> selectionList = ui->plotView->selectedGraphs();
         for(QCPGraph* selectedGraph : selectionList)
         {
-            dataManager->removeOutputDataByGraph(selectedGraph);
+            dataManager->removeGraph(selectedGraph);
             ui->plotView->removeGraph(selectedGraph);
         }
         ui->plotView->replot();

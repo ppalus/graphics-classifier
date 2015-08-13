@@ -3,21 +3,23 @@
 
 #include <cmath>
 #include <QColor>
+#include <QQueue>
 
 #include "ui_mainwindow.h"
 #include "util/loader.h"
 #include "util/datastructures.h"
 #include "plot/qcustomplot.h"
 
-//TODO dataSlot
+#define RESULT_MAX_COUNT 5
+
 class DataManager : public QObject
 {
     Q_OBJECT
 
-    static const int RESULT_MAX_COUNT;
     static const QColor PLOT_COLOR[];
     static const QCPScatterStyle::ScatterShape PLOT_SHAPE[];
 
+    //TODO refactor -> remove ImageData
     struct ImageData
     {
         QString stage;
@@ -26,14 +28,13 @@ class DataManager : public QObject
         qreal y;
     };
 
-    struct OutputDataSlot
+    struct Output
     {
         QString id;
-        QCPGraph *graph;
         QListWidget *list;
         QAbstractButton *label;
-        bool active;
-        DataSet dataSet;
+        QCPGraph *graph;
+        DataSet data;
     };
 
 public:
@@ -54,7 +55,7 @@ public:
     void replot();
     QStringList findImage(qreal b, qreal m);
     void saveResult();
-    void removeOutputDataByGraph(QCPGraph* graph);
+    void removeGraph(QCPGraph* graph);
 
     DataSet& getInput() { return input; }
 
@@ -69,27 +70,21 @@ public slots:
     void clearOutputData3();
     void clearOutputData4();
     void clearOutputData5();
-    void setActiveData1();
-    void setActiveData2();
-    void setActiveData3();
-    void setActiveData4();
-    void setActiveData5();
 
 private slots:
     void setInputData(const DataSet &dataSet);
 
 private:
-    void removeOutputData(QString id);
-    void moveOutputUp(int index);
-    void fixOutputLists();
+    void removeOutput(QString id);
+    void removeOutput(int index);
+    void refreshUI();
 
     Loader loader;
     Ui::MainWindow *ui;
     DataSet input;
-    OutputDataSlot output[5];
+    QList<Output> output;
     QString xCol;
     QString yCol;
-
 };
 
 #endif // DATAMANAGER_H
